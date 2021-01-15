@@ -1,0 +1,39 @@
+version: "3"
+
+networks:
+  default:
+    external:
+      name: common
+
+volumes:
+  db-data:
+
+services:
+  db:
+    image: postgres:11-alpine
+    environment:
+      POSTGRES_DB: wiki
+      POSTGRES_PASSWORD: wikijsrocks
+      POSTGRES_USER: wikijs
+    volumes:
+      - 'db-data:/var/lib/postgresql/data'
+
+  wiki:
+    image: requarks/wiki:2
+    depends_on:
+      - db
+    environment:
+      SSL_ACTIVE: "true"
+      LETSENCRYPT_DOMAIN: www.hexagrimoire.com
+      LETSENCRYPT_EMAIL: hexagrimoire@gmail.com
+      DB_TYPE: postgres
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: wikijs
+      DB_PASS: wikijsrocks
+      DB_NAME: wiki
+    ports:
+      - "80:3000"
+      - "443:3443"
+
+
