@@ -7,6 +7,7 @@ networks:
 
 volumes:
   db-data:
+  content:
 
 services:
   db:
@@ -32,6 +33,8 @@ services:
       DB_USER: wikijs
       DB_PASS: wikijsrocks
       DB_NAME: wiki
+    volumes:
+      - 'content:/wiki/data/content'
     ports:
       - "80:3000"
       - "443:3443"
